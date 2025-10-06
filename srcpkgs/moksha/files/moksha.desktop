@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Moksha
+Comment=Lightweight Desktop Environment
+Exec=moksha
+TryExec=moksha
+Type=Application
+DesktopNames=moksha
