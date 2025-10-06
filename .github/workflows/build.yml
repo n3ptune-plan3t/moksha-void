@@ -1,0 +1,58 @@
+name: Build Moksha
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Moksha 📦
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Clone void-packages
+        run: git clone --depth=1 https://github.com/void-linux/void-packages.git
+
+      - name: Install prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget tar xz-utils ca-certificates
+
+      - name: Download and install XBPS static binaries
+        run: |
+          wget https://repo-default.voidlinux.org/static/xbps-static-latest.x86_64-musl.tar.xz
+          tar xvf xbps-static-latest.x86_64-musl.tar.xz
+          sudo install -Dm755 usr/bin/* /usr/local/bin/
+
+      - name: Bootstrap XBPS-src
+        if: steps.cache-hostdir.outputs.cache-hit != 'true'
+        working-directory: void-packages
+        run: |
+          export XBPS_ARCH=x86_64
+          ./xbps-src binary-bootstrap
+
+      - name: Copy templates
+        run: |
+          # Copy XLibre templates to void-packages
+          mkdir -p void-packages/srcpkgs
+          cp -r srcpkgs/* void-packages/srcpkgs/ 2>/dev/null || true
+
+      - name: Allow restricted packages
+        working-directory: void-packages
+        run: echo XBPS_ALLOW_RESTRICTED=yes >> etc/conf
+
+      - name: Build efl
+        working-directory: void-packages
+        run: |
+          ./xbps-src pkg efl
+
+      - name: Build Moksha
+        working-directory: void-packages
+        run: |
+          ./xbps-src pkg moksha
+
+      - name: Upload built packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: xlibre-packages
+          path: void-packages/hostdir/binpkgs/*.xbps
