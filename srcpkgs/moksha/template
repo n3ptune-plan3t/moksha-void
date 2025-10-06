@@ -1,0 +1,61 @@
+# Template file for 'moksha'
+pkgname=moksha
+version=0.4.1
+revision=23.5
+_commit=afc09c5e44a7dc94bbd7f38d7ef5f2517624379f
+wrksrc=${pkgname}-${version}
+build_wrksrc=${pkgname}
+archs="x86_64"
+homepage="https://github.com/JeffHoogland/moksha"
+license="BSD-2-Clause"
+distfiles="https://github.com/JeffHoogland/moksha/archive/${_commit}.tar.gz"
+checksum="e341fdda21577e53a00ec39e02442a15db29b7f81f19c8797e0e20716af6ad0e"
+short_desc="Lightweight desktop environment forked from Enlightenment DR17"
+maintainer="Your Name <your.email@example.com>"
+makedepends="autoconf>=2.71 automake git pkgconf efl-devel>=1.27.0 glib-devel libpng-devel harfbuzz-devel fribidi-devel fontconfig-devel luajit-devel bullet-devel libxcb-devel xcb-util-keysyms-devel alsa-lib-devel udisks2-devel libsndfile-devel"
+depends="efl>=1.27.0 desktop-file-utils xorg-server xinit xsel xclip xdg-utils xdg-user-dirs xdg-dbus-proxy openssl-libs rrdtool"
+build_style="gnu-configure"
+configure_args="--prefix=/usr --enable-harfbuzz"
+subpackages="moksha-desktop"
+conf_files="/etc/enlightenment/sysactions.conf"
+
+do_fetch() {
+    vcs_fetch git https://github.com/JeffHoogland/moksha.git "${_commit}" "${wrksrc}"
+}
+
+do_prepare() {
+    sed -i 's|AM_GNU_GETTEXT_VERSION(\[0.19\])|AM_GNU_GETTEXT_VERSION([0.19], [external])|' configure.ac
+}
+
+do_build() {
+    export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
+    ./autogen.sh
+    ./configure ${configure_args}
+    make -j${XBPS_MAKEJOBS}
+}
+
+do_check() {
+    make check || true
+}
+
+do_install() {
+    make DESTDIR="${DESTDIR}" install
+    install -Dm644 "${wrksrc}/AUTHORS" "${wrksrc}/COPYING" -t "${DESTDIR}/usr/share/licenses/${pkgname}/"
+    install -Dm644 "${FILESDIR}/moksha.desktop" "${DESTDIR}/usr/share/xsessions/moksha.desktop"
+}
+
+moksha-desktop_package() {
+    short_desc="${short_desc} - Desktop files"
+    pkg_install() {
+        vmove usr/share/xsessions
+    }
+}
+
+# Contents of files/moksha.desktop (create in srcpkgs/moksha/files/)
+# [Desktop Entry]
+# Name=Moksha
+# Comment=Lightweight Desktop Environment
+# Exec=moksha
+# TryExec=moksha
+# Type=Application
+# DesktopNames=moksha
