@@ -23,7 +23,7 @@ configure_args="
  $(vopt_bool harfbuzz harfbuzz)
  $(vopt_bool simd native-arch-optimization)
  $(vopt_bool glib glib)"
-hostmakedepends="pkg-config gettext"
+hostmakedepends="pkg-config gettext cmake"
 makedepends="
  gettext-devel openssl-devel liblz4-devel glib-devel ibus-devel
  fontconfig-devel fribidi-devel $(vopt_if harfbuzz harfbuzz-devel)
@@ -31,7 +31,7 @@ makedepends="
  avahi-libs-devel eudev-libudev-devel libgomp-devel
  libsndfile-devel libmount-devel LuaJIT-devel poppler-cpp-devel
  librsvg-devel libspectre-devel libraw-devel libopenjpeg2-devel
- libheif-devel libavif-devel
+ libheif-devel libavif-devel lua-devel lua51-devel
  $(vopt_if drm 'libdrm-devel libinput-devel libxkbcommon-devel')
  $(vopt_if elogind elogind-devel)
  $(vopt_if gstreamer gst-plugins-base1-devel)
