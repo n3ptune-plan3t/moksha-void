@@ -57,7 +57,7 @@ jobs:
       - name: Build Moksha
         working-directory: void-packages
         run: |
-          ./xbps-src -R hostdir/binpkgs pkg moksha
+          ./xbps-src pkg moksha
 
       # --- CHANGES END HERE ---
 
