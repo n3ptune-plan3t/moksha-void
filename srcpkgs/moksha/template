@@ -1,27 +1,23 @@
 # Template file for 'moksha'
 pkgname=moksha
 version=0.4.1
-revision=23.5
-_commit=afc09c5e44a7dc94bbd7f38d7ef5f2517624379f
+revision=1
+_commit=c29debca29002575e11fa4d5f1119a3ac7108f8c
 wrksrc=${pkgname}-${version}
 build_wrksrc=${pkgname}
 archs="x86_64"
 homepage="https://github.com/JeffHoogland/moksha"
 license="BSD-2-Clause"
 distfiles="https://github.com/JeffHoogland/moksha/archive/${_commit}.tar.gz"
-checksum="e341fdda21577e53a00ec39e02442a15db29b7f81f19c8797e0e20716af6ad0e"
+checksum="1addff9bd1892ca2a7a77d15b1d2c654b1c38dfd5c9edc4347dfa7b2fc1b3d38"
 short_desc="Lightweight desktop environment forked from Enlightenment DR17"
-maintainer="Your Name <your.email@example.com>"
+maintainer="n3ptune-plan3t <n3ptune@plan3t>"
 makedepends="autoconf automake git pkgconf efl-devel glib-devel libpng-devel harfbuzz-devel fribidi-devel fontconfig-devel LuaJIT-devel bullet-devel libxcb-devel xcb-util-keysyms-devel alsa-lib-devel udisks2-devel libsndfile-devel openssl-devel"
 depends="efl desktop-file-utils xorg-server xinit xsel xclip xdg-utils xdg-user-dirs xdg-dbus-proxy openssl rrdtool"
 build_style="gnu-configure"
 configure_args="--prefix=/usr --enable-harfbuzz"
 subpackages="moksha-desktop"
 conf_files="/etc/enlightenment/sysactions.conf"
-
-do_fetch() {
-    vcs_fetch git https://github.com/JeffHoogland/moksha.git "${_commit}" "${wrksrc}"
-}
 
 do_prepare() {
     sed -i 's|AM_GNU_GETTEXT_VERSION(\[0.19\])|AM_GNU_GETTEXT_VERSION([0.19], [external])|' configure.ac
