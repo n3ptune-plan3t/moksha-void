@@ -1,6 +1,6 @@
 # Template file for 'enlightenment'
 pkgname=enlightenment
-ersion=0.27.1
+version=0.27.1
 revision=1
 build_style=meson
 configure_args="--sysconfdir=/etc -Dpam=true -Dsystemd=false
