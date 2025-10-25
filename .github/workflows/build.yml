@@ -57,7 +57,7 @@ jobs:
       - name: Build Moksha
         working-directory: void-packages
         run: |
-          ./xbps-src pkg moksha
+          ./xbps-src pkg enlightenment
 
       # --- CHANGES END HERE ---
 
